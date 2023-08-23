@@ -8,7 +8,7 @@ import (
 	"github.com/fatih/color"
 )
 
-type Logd struct{}
+type logger struct{}
 
 var (
 	out   = fmt.Println
@@ -21,8 +21,12 @@ var (
 	violet = color.New(color.FgHiMagenta).SprintfFunc()
 )
 
+func New() *logger {
+	return &logger{}
+}
+
 // FatalF and ErrorF are the same expect that FatalF uses os.Exit(1)
-func (l *Logd) Fatalf(format string, args ...interface{}) {
+func (l *logger) Fatalf(format string, args ...interface{}) {
 	messageToLog := red(format, args)
 
 	fatal := color.New(color.Bold, color.BgHiRed, color.FgWhite).Sprint("FATAL")
@@ -32,25 +36,25 @@ func (l *Logd) Fatalf(format string, args ...interface{}) {
 }
 
 // see  difference between Fatalf and Errorf above
-func (l *Logd) Errorf(format string, args ...interface{}) {
+func (l *logger) Errorf(format string, args ...interface{}) {
 	messageToLog := red(format, args)
 
 	out(buildMessage(messageToLog))
 }
 
-func (l *Logd) Infof(format string, args ...interface{}) {
+func (l *logger) Infof(format string, args ...interface{}) {
 	messageToLog := blue(format, args)
 
 	out(buildMessage(messageToLog))
 }
 
-func (l *Logd) Warnf(format string, args ...interface{}) {
+func (l *logger) Warnf(format string, args ...interface{}) {
 	messageToLog := violet(format, args)
 
 	out(buildMessage(messageToLog))
 }
 
-func (l *Logd) Debugf(format string, args ...interface{}) {
+func (l *logger) Debugf(format string, args ...interface{}) {
 	messageToLog := green(format, args)
 
 	out(buildMessage(messageToLog))
